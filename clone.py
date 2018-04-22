@@ -1,3 +1,4 @@
+from keras.models import model_from_json
 import csv
 import cv2
 import numpy as np
@@ -25,8 +26,8 @@ measurements = []
 	measurement = float(line[3])
 	measurements.append(measurement)
 '''
-for i in range(0, 52717):
-	current_path = '../lane-lines/output_images/'
+for i in range(10000, 40000):
+	current_path = '../research/images/'
 	image = cv2.imread(current_path + str(i) + '.jpg')
 	images.append(image)
 	measurement = float(lines[i][0])
@@ -55,7 +56,7 @@ model.add(Dense(10))
 model.add(Dense(1, name='OUTPUT'))
 
 model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=1)
+model.fit(X_train, y_train, validation_split=0.0, shuffle=True, nb_epoch=300)
 
 model.save('model.h5')
 
@@ -92,7 +93,10 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
 from keras import backend as K
 import tensorflow as tf
 # Create, compile and train model...
-print([out.op.name for out in model.outputs])
-print([inp.op.name for inp in model.inputs])
+print([out for out in model.outputs])
+print([inp for inp in model.inputs])
 frozen_graph = freeze_session(K.get_session(), output_names=[out.op.name for out in model.outputs])
 tf.train.write_graph(frozen_graph, ".", "model.pb", as_text=False)
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+	json_file.write(model_json)
