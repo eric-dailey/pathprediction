@@ -56,8 +56,8 @@ model.add(Dense(10))
 model.add(Dense(1, name='OUTPUT'))
 
 model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.0, shuffle=True, nb_epoch=300)
-
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=100)
+print(model.predict(images))
 model.save('model.h5')
 
 def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
