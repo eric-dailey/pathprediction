@@ -27,7 +27,7 @@ measurements = []
 	measurement = float(line[3])
 	measurements.append(measurement)
 '''
-for i in range(10000, 40000):
+for i in range(10000, 16000):
 	current_path = '../research/images/'
 	image = cv2.imread(current_path + str(i) + '.jpg')
 	images.append(image)
@@ -56,8 +56,8 @@ model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1, name='OUTPUT'))
 
-model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
-history = model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=100)
+model.compile(loss='msle', optimizer='adam', metrics=['acc'])
+history = model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=5000)
 print(history.history.keys())
 # summarize history for accuracy
 '''plt.plot(history.history['acc'])
